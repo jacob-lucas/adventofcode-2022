@@ -15,10 +15,6 @@ repositories {
 }
 
 dependencies {
-    constraints {
-        annotationProcessor "org.immutables:value:2.9.2"
-    }
-
     compile "io.vavr:vavr:0.10.4"
     compile "org.immutables:value:2.9.2"
     compile "com.google.guava:guava:31.1-jre"
