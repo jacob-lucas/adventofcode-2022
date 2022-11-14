@@ -1,5 +1,9 @@
 language: java
 
+os: linux
+dist: trusty
+jdk: openjdk10
+
 script:
   - gradle build
 
