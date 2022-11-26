@@ -15,7 +15,7 @@ repositories {
 }
 
 dependencies {
-    compile "io.vavr:vavr:0.10.4"
+    compile "io.vavr:vavr:1.0.0-alpha-4"
     compile "org.immutables:value:2.9.2"
     compile "com.google.guava:guava:31.1-jre"
     compile "org.apache.commons:commons-lang3:3.12.0"
