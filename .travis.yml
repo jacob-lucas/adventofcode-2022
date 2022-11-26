@@ -3,7 +3,7 @@ install: true
 
 os: linux
 dist: xenial
-jdk: oraclejdk11
+jdk: openjdk15
 
 script:
   - gradle build
