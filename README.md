@@ -1,5 +1,6 @@
 # adventofcode-2022
 [![Java CI](https://github.com/jacob-lucas/adventofcode-2022/actions/workflows/gradle.yml/badge.svg)](https://github.com/jacob-lucas/adventofcode-2022/actions/workflows/gradle.yml)
+[![Coverage Status](https://coveralls.io/repos/github/jacob-lucas/adventofcode-2022/badge.svg?branch=main)](https://coveralls.io/github/jacob-lucas/adventofcode-2022?branch=main)
 
 Solutions for [Advent of Code 2022](https://adventofcode.com/2022), presented in Java and built using Gradle.
 
