@@ -7,8 +7,8 @@ plugins {
 group 'com.jacoblucas'
 version '1.0-SNAPSHOT'
 
-sourceCompatibility = "17.PREVIEW"
-targetCompatibility = "17.PREVIEW"
+sourceCompatibility = "19.PREVIEW"
+targetCompatibility = "19.PREVIEW"
 
 repositories {
     mavenCentral()
