@@ -12,11 +12,22 @@ public class Day01 {
     public static void main(String[] args) throws IOException {
         final List<List<String>> input = InputReader.readGroups("day01-input.txt");
 
-        final Optional<Integer> max = input.stream()
+        final List<Integer> caloriesPerElf = input.stream()
                 .map(strs -> strs.stream().mapToInt(Integer::parseInt))
                 .map(IntStream::sum)
-                .max(Comparator.naturalOrder());
+                .toList();
 
+        // Part 1
+        final Optional<Integer> max = caloriesPerElf.stream().max(Comparator.naturalOrder());
         System.out.println(max.get());
+
+        // Part 2
+        final int top3 = caloriesPerElf
+                .stream()
+                .sorted(Comparator.reverseOrder())
+                .limit(3)
+                .mapToInt(Integer::valueOf)
+                .sum();
+        System.out.println(top3);
     }
 }
