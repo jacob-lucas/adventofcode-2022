@@ -53,6 +53,31 @@ public class Day02 {
         }
     }
 
+    public static Shape getShapeToThrow(final Pair<Shape, Shape> match) {
+        // X means you need to lose, Y means you need to end the round in a draw, and Z means you need to win
+        if (match.t() == ROCK) {
+            return switch (match.u()) {
+                case ROCK -> SCISSORS; // lose
+                case PAPER -> ROCK; // draw
+                case SCISSORS -> PAPER; // win
+            };
+        } else if (match.t() == PAPER) { // Y
+            return switch (match.u()) {
+                case ROCK -> ROCK; // lose
+                case PAPER -> PAPER; // draw
+                case SCISSORS -> SCISSORS; // win
+            };
+        } else if (match.t() == SCISSORS) { // Z
+            return switch (match.u()) {
+                case ROCK -> PAPER; // lose
+                case PAPER -> SCISSORS; // draw
+                case SCISSORS -> ROCK; // win
+            };
+        } else {
+            return null;
+        }
+    }
+
     public static void main(String[] args) throws IOException {
         final List<String> input = InputReader.read("day02-input.txt");
 
@@ -62,6 +87,7 @@ public class Day02 {
                 .toList();
 
         // Opponent is first column, you are the second column
+        // Part 1
         int score = 0;
         for (Pair match : matches) {
             final Shape winner = getWinner(match);
@@ -74,7 +100,25 @@ public class Day02 {
                 score += ((Shape) match.u()).getScore();
             }
         }
+        System.out.println(score);
 
+        // Opponent is first column, second column is how the round should end
+        // Part 2
+        score = 0;
+        for (Pair match : matches) {
+            final Shape thrown = getShapeToThrow(match);
+            final Shape result = ((Shape) match.u());
+
+            if (result == PAPER) // draw
+                score += 3;
+
+            if (result == SCISSORS) {
+                // win
+                score += thrown.getScore() + 6;
+            } else {
+                score += thrown.getScore();
+            }
+        }
         System.out.println(score);
     }
 }
