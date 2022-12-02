@@ -63,35 +63,15 @@ public class Day02 {
     }
 
     // Opponent is first column, you are the second column
-    public static int scoreV1(final Pair<Shape, Shape> match) {
-        int score = 0;
+    public static int score(final Pair<Shape, Shape> match) {
         final Shape winner = getWinner(match);
+
+        int score = match.u().getScore();
         if (winner == null)
             score += 3;
+        else if (winner == match.u())
+            score += 6;
 
-        if (winner == match.u()) {
-            score += winner.getScore() + 6;
-        } else {
-            score += match.u().getScore();
-        }
-        return score;
-    }
-
-    // Opponent is first column, second column is how the round should end
-    public static int scoreV2(final Pair<Shape, Shape> match) {
-        final Shape thrown = getShapeToThrow(match);
-        final Shape result = match.u();
-
-        int score = 0;
-        if (result == PAPER) // draw
-            score += 3;
-
-        if (result == SCISSORS) {
-            // win
-            score += thrown.getScore() + 6;
-        } else {
-            score += thrown.getScore();
-        }
         return score;
     }
 
@@ -105,13 +85,14 @@ public class Day02 {
 
         // Part 1
         int score = matches.stream()
-                .mapToInt(Day02::scoreV1)
+                .mapToInt(Day02::score)
                 .sum();
         System.out.println(score);
 
         // Part 2
         score = matches.stream()
-                .mapToInt(Day02::scoreV2)
+                .map(p -> new Pair<>(p.t(), getShapeToThrow(p)))
+                .mapToInt(Day02::score)
                 .sum();
         System.out.println(score);
     }

@@ -34,16 +34,9 @@ public class Day02Test {
     }
 
     @Test
-    public void testScoreV1() {
-        assertThat(Day02.scoreV1(matches.get(0)), is(8));
-        assertThat(Day02.scoreV1(matches.get(1)), is(1));
-        assertThat(Day02.scoreV1(matches.get(2)), is(6));
-    }
-
-    @Test
-    public void testScoreV2() {
-        assertThat(Day02.scoreV2(matches.get(0)), is(4));
-        assertThat(Day02.scoreV2(matches.get(1)), is(1));
-        assertThat(Day02.scoreV2(matches.get(2)), is(7));
+    public void testScore() {
+        assertThat(Day02.score(matches.get(0)), is(8));
+        assertThat(Day02.score(matches.get(1)), is(1));
+        assertThat(Day02.score(matches.get(2)), is(6));
     }
 }
