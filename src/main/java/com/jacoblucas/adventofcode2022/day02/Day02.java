@@ -6,59 +6,43 @@ import com.jacoblucas.adventofcode2022.utils.Pair;
 import java.io.IOException;
 import java.util.List;
 
-import static com.jacoblucas.adventofcode2022.day02.Shape.PAPER;
-import static com.jacoblucas.adventofcode2022.day02.Shape.ROCK;
-import static com.jacoblucas.adventofcode2022.day02.Shape.SCISSORS;
+import static com.jacoblucas.adventofcode2022.day02.Shape.RESULT_MAP;
 
 public class Day02 {
     public static Shape getWinner(final Pair<Shape, Shape> match) {
-        if (match.first() == ROCK) {
-            return switch (match.second()) {
-                case PAPER -> PAPER;
-                case SCISSORS -> ROCK;
-                case ROCK -> null;
-            };
-        } else if (match.first() == PAPER) {
-            return switch (match.second()) {
-                case PAPER -> null;
-                case SCISSORS -> SCISSORS;
-                case ROCK -> PAPER;
-            };
-        } else if (match.first() == SCISSORS) {
-            return switch (match.second()) {
-                case PAPER -> SCISSORS;
-                case SCISSORS -> null;
-                case ROCK -> ROCK;
-            };
-        } else {
-            return null;
-        }
+        return RESULT_MAP.get(match);
     }
 
-    // X/ROCK means you need to lose,
-    // Y/PAPER means you need to end the round in a draw, and
-    // Z/SCISSORS means you need to win
     public static Shape getShapeToThrow(final Pair<Shape, Shape> match) {
-        if (match.first() == ROCK) {
-            return switch (match.second()) { // X
-                case ROCK -> SCISSORS; // lose
-                case PAPER -> ROCK; // draw
-                case SCISSORS -> PAPER; // win
-            };
-        } else if (match.first() == PAPER) { // Y
-            return switch (match.second()) {
-                case ROCK -> ROCK; // lose
-                case PAPER -> PAPER; // draw
-                case SCISSORS -> SCISSORS; // win
-            };
-        } else if (match.first() == SCISSORS) { // Z
-            return switch (match.second()) {
-                case ROCK -> PAPER; // lose
-                case PAPER -> SCISSORS; // draw
-                case SCISSORS -> ROCK; // win
-            };
-        } else {
-            return null;
+        final Shape opponent = match.first();
+
+        // X/ROCK means you need to lose,
+        // Y/PAPER means you need to end the round in a draw, and
+        // Z/SCISSORS means you need to win
+        final Shape result = match.second();
+
+        switch (result) {
+            case ROCK -> {
+                // what loses to the opponents throw?
+                return RESULT_MAP.entrySet().stream()
+                        .filter(e -> e.getKey().second() == opponent && e.getValue() == opponent)
+                        .map(e -> e.getKey().first())
+                        .findFirst()
+                        .orElseThrow(() -> new IllegalStateException("No configured result to lose against: " + opponent));
+            }
+            case PAPER -> {
+                // what draws with the opponents throw?
+                return opponent;
+            }
+            case SCISSORS -> {
+                // what beats the opponents throw?
+                return RESULT_MAP.entrySet().stream()
+                        .filter(e -> e.getKey().first() == opponent && e.getValue() != opponent)
+                        .map(e -> e.getKey().second())
+                        .findFirst()
+                        .orElseThrow(() -> new IllegalStateException("No configured result to win against: " + opponent));
+            }
+            default -> throw new IllegalStateException("Unexpected shape: " + result);
         }
     }
 
