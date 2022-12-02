@@ -14,4 +14,13 @@ public enum Shape {
     public int getScore() {
         return score;
     }
+
+    public static Shape parse(final String str) {
+        return switch(str) {
+            case "A", "X" -> ROCK;
+            case "B", "Y" -> PAPER;
+            case "C", "Z" -> SCISSORS;
+            default -> throw new IllegalStateException("Unexpected value: " + str);
+        };
+    }
 }

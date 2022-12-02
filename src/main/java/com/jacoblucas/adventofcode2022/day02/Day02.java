@@ -11,24 +11,6 @@ import static com.jacoblucas.adventofcode2022.day02.Shape.ROCK;
 import static com.jacoblucas.adventofcode2022.day02.Shape.SCISSORS;
 
 public class Day02 {
-    public static Shape parseOpponent(final String s) {
-        return switch(s) {
-            case "A" -> ROCK;
-            case "B" -> Shape.PAPER;
-            case "C" -> Shape.SCISSORS;
-            default -> throw new IllegalStateException("Unexpected value: " + s);
-        };
-    }
-
-    public static Shape parsePlayer(final String s) {
-        return switch(s) {
-            case "X" -> ROCK;
-            case "Y" -> Shape.PAPER;
-            case "Z" -> Shape.SCISSORS;
-            default -> throw new IllegalStateException("Unexpected value: " + s);
-        };
-    }
-
     public static Shape getWinner(final Pair<Shape, Shape> match) {
         if (match.t() == ROCK) {
             return switch (match.u()) {
@@ -53,10 +35,12 @@ public class Day02 {
         }
     }
 
+    // X/ROCK means you need to lose,
+    // Y/PAPER means you need to end the round in a draw, and
+    // Z/SCISSORS means you need to win
     public static Shape getShapeToThrow(final Pair<Shape, Shape> match) {
-        // X means you need to lose, Y means you need to end the round in a draw, and Z means you need to win
         if (match.t() == ROCK) {
-            return switch (match.u()) {
+            return switch (match.u()) { // X
                 case ROCK -> SCISSORS; // lose
                 case PAPER -> ROCK; // draw
                 case SCISSORS -> PAPER; // win
@@ -78,47 +62,57 @@ public class Day02 {
         }
     }
 
+    // Opponent is first column, you are the second column
+    public static int scoreV1(final Pair match) {
+        int score = 0;
+        final Shape winner = getWinner(match);
+        if (winner == null)
+            score += 3;
+
+        if (winner == match.u()) {
+            score += winner.getScore() + 6;
+        } else {
+            score += ((Shape) match.u()).getScore();
+        }
+        return score;
+    }
+
+    // Opponent is first column, second column is how the round should end
+    public static int scoreV2(final Pair match) {
+        final Shape thrown = getShapeToThrow(match);
+        final Shape result = ((Shape) match.u());
+
+        int score = 0;
+        if (result == PAPER) // draw
+            score += 3;
+
+        if (result == SCISSORS) {
+            // win
+            score += thrown.getScore() + 6;
+        } else {
+            score += thrown.getScore();
+        }
+        return score;
+    }
+
     public static void main(String[] args) throws IOException {
         final List<String> input = InputReader.read("day02-input.txt");
 
         final List<Pair> matches = input.stream()
                 .map(s -> s.split(" "))
-                .map(arr -> new Pair(parseOpponent(arr[0]), parsePlayer(arr[1])))
+                .map(arr -> new Pair(Shape.parse(arr[0]), Shape.parse(arr[1])))
                 .toList();
 
-        // Opponent is first column, you are the second column
         // Part 1
-        int score = 0;
-        for (Pair match : matches) {
-            final Shape winner = getWinner(match);
-            if (winner == null)
-                score += 3;
-
-            if (winner == match.u()) {
-                score += winner.getScore() + 6;
-            } else {
-                score += ((Shape) match.u()).getScore();
-            }
-        }
+        int score = matches.stream()
+                .mapToInt(Day02::scoreV1)
+                .sum();
         System.out.println(score);
 
-        // Opponent is first column, second column is how the round should end
         // Part 2
-        score = 0;
-        for (Pair match : matches) {
-            final Shape thrown = getShapeToThrow(match);
-            final Shape result = ((Shape) match.u());
-
-            if (result == PAPER) // draw
-                score += 3;
-
-            if (result == SCISSORS) {
-                // win
-                score += thrown.getScore() + 6;
-            } else {
-                score += thrown.getScore();
-            }
-        }
+        score = matches.stream()
+                .mapToInt(Day02::scoreV2)
+                .sum();
         System.out.println(score);
     }
 }

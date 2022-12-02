@@ -14,13 +14,13 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class Day02Test {
+    private final List<Pair> matches = Arrays.asList(
+            new Pair(ROCK, PAPER),
+            new Pair(PAPER, ROCK),
+            new Pair(SCISSORS, SCISSORS));
+
     @Test
     public void testGetWinner() {
-        final List<Pair> matches = Arrays.asList(
-                new Pair(ROCK, PAPER), // WIN
-                new Pair(PAPER, ROCK), // LOSE
-                new Pair(SCISSORS, SCISSORS)); // DRAW
-
         assertThat(Day02.getWinner(matches.get(0)), is(PAPER));
         assertThat(Day02.getWinner(matches.get(1)), is(PAPER));
         assertThat(Day02.getWinner(matches.get(2)), is(nullValue()));
@@ -28,13 +28,22 @@ public class Day02Test {
 
     @Test
     public void testGetShapeToThrow() {
-        final List<Pair> matches = Arrays.asList(
-                new Pair(ROCK, PAPER), // DRAW
-                new Pair(PAPER, ROCK), // LOSE
-                new Pair(SCISSORS, SCISSORS)); // WIN
-
         assertThat(Day02.getShapeToThrow(matches.get(0)), is(ROCK));
         assertThat(Day02.getShapeToThrow(matches.get(1)), is(ROCK));
         assertThat(Day02.getShapeToThrow(matches.get(2)), is(ROCK));
+    }
+
+    @Test
+    public void testScoreV1() {
+        assertThat(Day02.scoreV1(matches.get(0)), is(8));
+        assertThat(Day02.scoreV1(matches.get(1)), is(1));
+        assertThat(Day02.scoreV1(matches.get(2)), is(6));
+    }
+
+    @Test
+    public void testScoreV2() {
+        assertThat(Day02.scoreV2(matches.get(0)), is(4));
+        assertThat(Day02.scoreV2(matches.get(1)), is(1));
+        assertThat(Day02.scoreV2(matches.get(2)), is(7));
     }
 }
