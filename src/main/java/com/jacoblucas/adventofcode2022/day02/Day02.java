@@ -12,20 +12,20 @@ import static com.jacoblucas.adventofcode2022.day02.Shape.SCISSORS;
 
 public class Day02 {
     public static Shape getWinner(final Pair<Shape, Shape> match) {
-        if (match.t() == ROCK) {
-            return switch (match.u()) {
+        if (match.first() == ROCK) {
+            return switch (match.second()) {
                 case PAPER -> PAPER;
                 case SCISSORS -> ROCK;
                 case ROCK -> null;
             };
-        } else if (match.t() == PAPER) {
-            return switch (match.u()) {
+        } else if (match.first() == PAPER) {
+            return switch (match.second()) {
                 case PAPER -> null;
                 case SCISSORS -> SCISSORS;
                 case ROCK -> PAPER;
             };
-        } else if (match.t() == SCISSORS) {
-            return switch (match.u()) {
+        } else if (match.first() == SCISSORS) {
+            return switch (match.second()) {
                 case PAPER -> SCISSORS;
                 case SCISSORS -> null;
                 case ROCK -> ROCK;
@@ -39,20 +39,20 @@ public class Day02 {
     // Y/PAPER means you need to end the round in a draw, and
     // Z/SCISSORS means you need to win
     public static Shape getShapeToThrow(final Pair<Shape, Shape> match) {
-        if (match.t() == ROCK) {
-            return switch (match.u()) { // X
+        if (match.first() == ROCK) {
+            return switch (match.second()) { // X
                 case ROCK -> SCISSORS; // lose
                 case PAPER -> ROCK; // draw
                 case SCISSORS -> PAPER; // win
             };
-        } else if (match.t() == PAPER) { // Y
-            return switch (match.u()) {
+        } else if (match.first() == PAPER) { // Y
+            return switch (match.second()) {
                 case ROCK -> ROCK; // lose
                 case PAPER -> PAPER; // draw
                 case SCISSORS -> SCISSORS; // win
             };
-        } else if (match.t() == SCISSORS) { // Z
-            return switch (match.u()) {
+        } else if (match.first() == SCISSORS) { // Z
+            return switch (match.second()) {
                 case ROCK -> PAPER; // lose
                 case PAPER -> SCISSORS; // draw
                 case SCISSORS -> ROCK; // win
@@ -66,10 +66,10 @@ public class Day02 {
     public static int score(final Pair<Shape, Shape> match) {
         final Shape winner = getWinner(match);
 
-        int score = match.u().getScore();
+        int score = match.second().getScore();
         if (winner == null)
             score += 3;
-        else if (winner == match.u())
+        else if (winner == match.second())
             score += 6;
 
         return score;
@@ -91,7 +91,7 @@ public class Day02 {
 
         // Part 2
         score = matches.stream()
-                .map(p -> new Pair<>(p.t(), getShapeToThrow(p)))
+                .map(p -> new Pair<>(p.first(), getShapeToThrow(p)))
                 .mapToInt(Day02::score)
                 .sum();
         System.out.println(score);
