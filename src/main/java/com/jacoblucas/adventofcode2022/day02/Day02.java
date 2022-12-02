@@ -63,7 +63,7 @@ public class Day02 {
     }
 
     // Opponent is first column, you are the second column
-    public static int scoreV1(final Pair match) {
+    public static int scoreV1(final Pair<Shape, Shape> match) {
         int score = 0;
         final Shape winner = getWinner(match);
         if (winner == null)
@@ -72,15 +72,15 @@ public class Day02 {
         if (winner == match.u()) {
             score += winner.getScore() + 6;
         } else {
-            score += ((Shape) match.u()).getScore();
+            score += match.u().getScore();
         }
         return score;
     }
 
     // Opponent is first column, second column is how the round should end
-    public static int scoreV2(final Pair match) {
+    public static int scoreV2(final Pair<Shape, Shape> match) {
         final Shape thrown = getShapeToThrow(match);
-        final Shape result = ((Shape) match.u());
+        final Shape result = match.u();
 
         int score = 0;
         if (result == PAPER) // draw
@@ -98,9 +98,9 @@ public class Day02 {
     public static void main(String[] args) throws IOException {
         final List<String> input = InputReader.read("day02-input.txt");
 
-        final List<Pair> matches = input.stream()
+        final List<Pair<Shape, Shape>> matches = input.stream()
                 .map(s -> s.split(" "))
-                .map(arr -> new Pair(Shape.parse(arr[0]), Shape.parse(arr[1])))
+                .map(arr -> new Pair<>(Shape.parse(arr[0]), Shape.parse(arr[1])))
                 .toList();
 
         // Part 1

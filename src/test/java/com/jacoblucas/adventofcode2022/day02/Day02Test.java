@@ -14,10 +14,10 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class Day02Test {
-    private final List<Pair> matches = Arrays.asList(
-            new Pair(ROCK, PAPER),
-            new Pair(PAPER, ROCK),
-            new Pair(SCISSORS, SCISSORS));
+    private final List<Pair<Shape, Shape>> matches = Arrays.asList(
+            new Pair<>(ROCK, PAPER),
+            new Pair<>(PAPER, ROCK),
+            new Pair<>(SCISSORS, SCISSORS));
 
     @Test
     public void testGetWinner() {
