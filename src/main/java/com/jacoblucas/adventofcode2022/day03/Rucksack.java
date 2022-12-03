@@ -15,6 +15,12 @@ public record Rucksack(String items) {
         return items.substring(items.length() / 2);
     }
 
+    public Set<Item> itemSet() {
+        return items.chars()
+                .mapToObj(ch -> new Item((char)ch))
+                .collect(Collectors.toSet());
+    }
+
     public List<Item> getOverlappingItems() {
         final Set<Item> c1 = getCompartment1().chars()
                 .mapToObj(ch -> new Item((char)ch))
