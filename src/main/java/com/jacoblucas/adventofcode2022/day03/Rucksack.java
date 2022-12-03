@@ -16,19 +16,20 @@ public record Rucksack(String items) {
     }
 
     public Set<Item> itemSet() {
-        return items.chars()
-                .mapToObj(ch -> new Item((char)ch))
-                .collect(Collectors.toSet());
+        return toItemSet(items);
     }
 
     public List<Item> getOverlappingItems() {
-        final Set<Item> c1 = getCompartment1().chars()
-                .mapToObj(ch -> new Item((char)ch))
-                .collect(Collectors.toSet());
-        final Set<Item> c2 = getCompartment2().chars()
-                .mapToObj(ch -> new Item((char)ch))
-                .collect(Collectors.toSet());
+        final Set<Item> c1 = toItemSet(getCompartment1());
+        final Set<Item> c2 = toItemSet(getCompartment2());
+        return Sets.intersection(c1, c2)
+                .stream()
+                .toList();
+    }
 
-        return Sets.intersection(c1, c2).stream().toList();
+    private Set<Item> toItemSet(final String str) {
+        return str.chars()
+                .mapToObj(ch -> new Item((char)ch))
+                .collect(Collectors.toSet());
     }
 }
