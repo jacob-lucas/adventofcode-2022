@@ -3,6 +3,7 @@ package com.jacoblucas.adventofcode2022.day05;
 import com.jacoblucas.adventofcode2022.utils.InputReader;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,24 @@ import java.util.Stack;
 import java.util.stream.IntStream;
 
 public class Day05 {
+    static Map<Integer, Stack<Character>> STACK_MAP = new HashMap<>();
+    static List<Instruction> INSTRUCTIONS = new ArrayList<>();
+
+    public static void initialise(List<String> input) {
+        int splitPoint = 0;
+        for (int i=0; i<input.size(); i++) {
+            if (input.get(i).isBlank()) {
+                // this is the break between stacks and instructions
+                splitPoint = i;
+                break;
+            }
+        }
+        STACK_MAP = parseStacks(input.subList(0, splitPoint));
+        INSTRUCTIONS = input.subList(splitPoint + 1, input.size()).stream()
+                .map(Instruction::parse)
+                .toList();
+    }
+
     public static Map<Integer, Stack<Character>> parseStacks(List<String> stackInput) {
         final Map<Integer, Stack<Character>> stacks = new HashMap<>();
 
@@ -30,7 +49,10 @@ public class Day05 {
                 final Stack<Character> stack = stacks.get(id);
                 final String line = stackInput.get(i);
 
-                if (index > line.length()) continue;
+                if (index > line.length()) {
+                    continue;
+                }
+
                 final char ch = line.charAt(index);
                 if (ch != ' ') {
                     stack.push(ch);
@@ -67,41 +89,23 @@ public class Day05 {
 
     public static void main(String[] args) throws IOException {
         final List<String> input = InputReader.read("day05-input.txt");
-
-        int splitPoint = 0;
-        for (int i=0; i<input.size(); i++) {
-            if (input.get(i).isBlank()) {
-                // this is the break between stacks and instructions
-                splitPoint = i;
-                break;
-            }
-        }
-
-        Map<Integer, Stack<Character>> stacks = parseStacks(input.subList(0, splitPoint));
-        List<Instruction> instructions = input.subList(splitPoint + 1, input.size()).stream()
-                .map(Instruction::parse)
-                .toList();
+        initialise(input);
 
         // Part 1
-        execute(instructions, stacks);
-        StringBuilder sb = new StringBuilder();
-        for (final int i : stacks.keySet()) {
-            sb.append(stacks.get(i).peek());
-        }
-        System.out.println(sb);
-
-        // reset for Part 2
-        stacks = parseStacks(input.subList(0, splitPoint));
-        instructions = input.subList(splitPoint + 1, input.size()).stream()
-                .map(Instruction::parse)
-                .toList();
+        execute(INSTRUCTIONS, STACK_MAP);
+        System.out.println(toStackString());
 
         // Part 2
-        executeCrateMover9001(instructions, stacks);
-        sb = new StringBuilder();
-        for (final int i : stacks.keySet()) {
-            sb.append(stacks.get(i).peek());
+        initialise(input);
+        executeCrateMover9001(INSTRUCTIONS, STACK_MAP);
+        System.out.println(toStackString());
+    }
+
+    static String toStackString() {
+        StringBuilder sb = new StringBuilder();
+        for (final int i : STACK_MAP.keySet()) {
+            sb.append(STACK_MAP.get(i).peek());
         }
-        System.out.println(sb);
+        return sb.toString();
     }
 }

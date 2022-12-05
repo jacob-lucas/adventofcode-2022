@@ -17,6 +17,7 @@ public class Day04Test {
             "2-8,3-7",
             "6-6,4-6",
             "2-6,4-8");
+
     @Test
     public void testParseInput() {
         assertThat(Day04.parseInput(INPUT), is(ImmutableList.of(
