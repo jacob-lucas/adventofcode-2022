@@ -69,4 +69,38 @@ public class Day05Test {
         assertThat(stacks.get(2), is(expectedS2));
         assertThat(stacks.get(3), is(expectedS3));
     }
+
+    @Test
+    public void testExecuteCrateMover9001() {
+        final List<String> stackInput = ImmutableList.of(
+                "    [D]",
+                "[N] [C]",
+                "[Z] [M] [P]",
+                " 1   2   3");
+        final Map<Integer, Stack<Character>> stacks = Day05.parseStacks(stackInput);
+        final List<String> instructionInput = ImmutableList.of(
+                "move 1 from 2 to 1",
+                "move 3 from 1 to 3",
+                "move 2 from 2 to 1",
+                "move 1 from 1 to 2");
+
+        Day05.executeCrateMover9001(instructionInput.stream().map(Instruction::parse).toList(), stacks);
+
+        final Stack<Character> expectedS1 = new Stack<>();
+        expectedS1.push('M');
+
+        final Stack<Character> expectedS2 = new Stack<>();
+        expectedS2.push('C');
+
+        final Stack<Character> expectedS3 = new Stack<>();
+        expectedS3.push('P');
+        expectedS3.push('Z');
+        expectedS3.push('N');
+        expectedS3.push('D');
+
+        assertThat(stacks.get(1), is(expectedS1));
+        assertThat(stacks.get(2), is(expectedS2));
+        assertThat(stacks.get(3), is(expectedS3));
+
+    }
 }

@@ -51,6 +51,20 @@ public class Day05 {
         }
     }
 
+    public static void executeCrateMover9001(final List<Instruction> instructions, final Map<Integer, Stack<Character>> stacks) {
+        for (final Instruction i : instructions) {
+            Stack<Character> tmp = new Stack<>();
+            IntStream.range(0, i.n()).forEach(n -> {
+                final Stack<Character> fromStack = stacks.get(i.from());
+                tmp.push(fromStack.pop());
+            });
+            IntStream.range(0, i.n()).forEach(n -> {
+                final Stack<Character> toStack = stacks.get(i.to());
+                toStack.push(tmp.pop());
+            });
+        }
+    }
+
     public static void main(String[] args) throws IOException {
         final List<String> input = InputReader.read("day05-input.txt");
 
@@ -63,14 +77,28 @@ public class Day05 {
             }
         }
 
-        final Map<Integer, Stack<Character>> stacks = parseStacks(input.subList(0, splitPoint));
-        final List<Instruction> instructions = input.subList(splitPoint + 1, input.size()).stream()
+        Map<Integer, Stack<Character>> stacks = parseStacks(input.subList(0, splitPoint));
+        List<Instruction> instructions = input.subList(splitPoint + 1, input.size()).stream()
                 .map(Instruction::parse)
                 .toList();
 
         // Part 1
         execute(instructions, stacks);
-        final StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
+        for (final int i : stacks.keySet()) {
+            sb.append(stacks.get(i).peek());
+        }
+        System.out.println(sb);
+
+        // reset for Part 2
+        stacks = parseStacks(input.subList(0, splitPoint));
+        instructions = input.subList(splitPoint + 1, input.size()).stream()
+                .map(Instruction::parse)
+                .toList();
+
+        // Part 2
+        executeCrateMover9001(instructions, stacks);
+        sb = new StringBuilder();
         for (final int i : stacks.keySet()) {
             sb.append(stacks.get(i).peek());
         }
