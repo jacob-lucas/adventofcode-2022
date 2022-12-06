@@ -9,11 +9,9 @@ import java.util.stream.Collectors;
 
 public class Day06 {
     public static int detectStartOfPacketMarker(final String buffer, final int len) {
-        for (int i=0; i<buffer.length(); i++) {
-            final String header = buffer.substring(i, Math.min(i + len, buffer.length()));
-            if (header.length() < 4) {
-                return -1;
-            } else {
+        if (buffer.length() >= len) {
+            for (int i = 0; i < buffer.length(); i++) {
+                final String header = buffer.substring(i, Math.min(i + len, buffer.length()));
                 final Set<Integer> headerSet = header.chars().boxed().collect(Collectors.toSet());
                 if (headerSet.size() == len) {
                     return i + len;
