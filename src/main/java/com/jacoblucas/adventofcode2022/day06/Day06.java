@@ -29,5 +29,8 @@ public class Day06 {
 
         // Part 1
         System.out.println(detectStartOfPacketMarker(input.get(0), 4));
+
+        // Part 2
+        System.out.println(detectStartOfPacketMarker(input.get(0), 14));
     }
 }
