@@ -66,5 +66,12 @@ public class DirectoryTest {
         final Directory root = Day07.parseFileSystem(testInput);
 
         assertThat(root.getSize(), is(48381165L));
+
+        final Directory d = root.getSubDirectories().stream()
+                .filter(dir -> dir.getName().equals("d"))
+                .findFirst()
+                .get();
+
+        assertThat(d.getSize(), is(24933642L));
     }
 }

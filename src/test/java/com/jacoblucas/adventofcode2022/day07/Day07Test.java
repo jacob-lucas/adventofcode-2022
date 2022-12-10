@@ -44,7 +44,16 @@ public class Day07Test {
         final List<String> testInput = InputReader.readFile("src/test/resources/","day07-test-input.txt");
         final Directory root = Day07.parseFileSystem(testInput);
 
-        final List<Directory> filtered = Day07.findDirectories(root, 100000);
+        final List<Directory> filtered = Day07.findDirectories(root, (directory -> directory.getSize() <= 100000));
         assertThat(filtered.stream().map(Directory::getName).collect(Collectors.toList()), containsInAnyOrder("a", "e"));
+    }
+
+    @Test
+    public void testGetDeleteCandidates() throws IOException {
+        final List<String> testInput = InputReader.readFile("src/test/resources/","day07-test-input.txt");
+        final Directory root = Day07.parseFileSystem(testInput);
+
+        final List<Directory> deleteCandidates = Day07.getDeleteCandidates(70000000, 30000000, root);
+        assertThat(deleteCandidates.stream().map(Directory::getName).collect(Collectors.toList()), containsInAnyOrder("d", "/"));
     }
 }

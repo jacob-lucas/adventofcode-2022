@@ -5,8 +5,10 @@ import com.jacoblucas.adventofcode2022.utils.InputReader;
 import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Deque;
 import java.util.List;
+import java.util.function.Function;
 
 public class Day07 {
 
@@ -47,17 +49,23 @@ public class Day07 {
         return root;
     }
 
-    public static List<Directory> findDirectories(final Directory root, final long sizeCeiling) {
+    public static List<Directory> findDirectories(final Directory root, final Function<Directory, Boolean> filter) {
         final List<Directory> filtered = new ArrayList<>();
-        final Deque<Directory> queue = new ArrayDeque<>(root.getSubDirectories());
+        final Deque<Directory> queue = new ArrayDeque<>();
+        queue.add(root);
         while (!queue.isEmpty()) {
             final Directory dir = queue.pop();
-            if (dir.getSize() <= sizeCeiling) {
+            if (filter.apply(dir)) {
                 filtered.add(dir);
             }
             queue.addAll(dir.getSubDirectories());
         }
         return filtered;
+    }
+
+    public static List<Directory> getDeleteCandidates(final long capacity, final long updateSize, final Directory root) {
+        final long available = capacity - root.getSize();
+        return findDirectories(root, (directory -> directory.getSize() >= updateSize - available));
     }
 
     public static void main(String[] args) throws IOException {
@@ -67,7 +75,14 @@ public class Day07 {
         root.ls();
 
         // Part 1
-        final List<Directory> directories = findDirectories(root, 100000);
+        List<Directory> directories = findDirectories(root, (directory -> directory.getSize() <= 100000));
         System.out.println(directories.stream().mapToLong(Directory::getSize).sum());
+
+        // Part 2
+        directories = getDeleteCandidates(70000000, 30000000, root);
+        final Directory toDelete = directories.stream()
+                .min(Comparator.comparingLong(Directory::getSize))
+                .orElseThrow(() -> new IllegalStateException("no delete candidate available"));
+        System.out.println(toDelete.getSize());
     }
 }
