@@ -91,4 +91,27 @@ public class Day08Test {
         final Tree[][] map = Day08.parse(INPUT);
         assertThat(Day08.countVisible(map), is(21));
     }
+
+    @Test
+    public void testScenicScore() {
+        final Tree[][] map = Day08.parse(INPUT);
+        assertThat(Day08.scenicScore(map, 2, 1), is(4));
+        assertThat(Day08.scenicScore(map, 2, 3), is(8));
+    }
+
+    @Test
+    public void testScenicScoreMiddle5() {
+        final Tree[][] map = Day08.parse(INPUT);
+        assertThat(Day08.scenicScore(map, 2, 1, 5, -1, 0, 0), is(1));
+        assertThat(Day08.scenicScore(map, 2, 1, 5, 1, 0, 0), is(2));
+        assertThat(Day08.scenicScore(map, 2, 1, 5, 0, -1, 0), is(1));
+        assertThat(Day08.scenicScore(map, 2, 1, 5, 0, 1, 0), is(2));
+    }
+
+    @Test
+    public void testMaxScenicScore() {
+        final Tree[][] map = Day08.parse(INPUT);
+        long maxScenicScore = Day08.maxScenicScore(map);
+        assertThat(maxScenicScore, is(8L));
+    }
 }

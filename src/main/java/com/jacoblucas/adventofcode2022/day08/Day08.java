@@ -60,6 +60,41 @@ public class Day08 {
         return visible;
     }
 
+    public static long scenicScore(final Tree[][] map, int x, int y) {
+        return scenicScore(map, x, y, map[y][x].height(), -1, 0, 0) *
+                scenicScore(map, x, y, map[y][x].height(), 1, 0, 0) *
+                scenicScore(map, x, y, map[y][x].height(), 0, -1, 0) *
+                scenicScore(map, x, y, map[y][x].height(), 0, 1, 0);
+    }
+
+    protected static long scenicScore(final Tree[][] map, int x, int y, int refHeight, int dx, int dy, long count) {
+        int coordX = x + dx;
+        int coordY = y + dy;
+
+        if (coordX < 0 || coordX >= map[0].length || coordY < 0 || coordY >= map.length) {
+            return count;
+        }
+
+        if (map[coordY][coordX].height() >= refHeight) {
+            return count + 1;
+        }
+
+        return scenicScore(map, coordX, coordY, refHeight, dx, dy, count + 1);
+    }
+
+    public static long maxScenicScore(final Tree[][] map) {
+        long maxScore = Long.MIN_VALUE;
+        for (int y = 0; y < map.length; y++) {
+            for (int x = 0; x < map[0].length; x++) {
+                long scenicScore = scenicScore(map, x, y);
+                if (scenicScore > maxScore) {
+                    maxScore = scenicScore;
+                }
+            }
+        }
+        return maxScore;
+    }
+
     public static void main(String[] args) throws IOException {
         final List<String> input = InputReader.read("day08-input.txt");
 
@@ -67,5 +102,8 @@ public class Day08 {
 
         // Part 1
         System.out.println(countVisible(map));
+
+        // Part 2
+        System.out.println(maxScenicScore(map));
     }
 }
