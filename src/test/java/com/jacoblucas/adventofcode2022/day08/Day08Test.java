@@ -95,17 +95,17 @@ public class Day08Test {
     @Test
     public void testScenicScore() {
         final Tree[][] map = Day08.parse(INPUT);
-        assertThat(Day08.scenicScore(map, 2, 1), is(4));
-        assertThat(Day08.scenicScore(map, 2, 3), is(8));
+        assertThat(Day08.scenicScore(map, 2, 1), is(4L));
+        assertThat(Day08.scenicScore(map, 2, 3), is(8L));
     }
 
     @Test
     public void testScenicScoreMiddle5() {
         final Tree[][] map = Day08.parse(INPUT);
-        assertThat(Day08.scenicScore(map, 2, 1, 5, -1, 0, 0), is(1));
-        assertThat(Day08.scenicScore(map, 2, 1, 5, 1, 0, 0), is(2));
-        assertThat(Day08.scenicScore(map, 2, 1, 5, 0, -1, 0), is(1));
-        assertThat(Day08.scenicScore(map, 2, 1, 5, 0, 1, 0), is(2));
+        assertThat(Day08.scenicScore(map, 2, 1, 5, -1, 0, 0), is(1L));
+        assertThat(Day08.scenicScore(map, 2, 1, 5, 1, 0, 0), is(2L));
+        assertThat(Day08.scenicScore(map, 2, 1, 5, 0, -1, 0), is(1L));
+        assertThat(Day08.scenicScore(map, 2, 1, 5, 0, 1, 0), is(2L));
     }
 
     @Test
