@@ -22,9 +22,14 @@ public class Day09 {
     public static void main(String[] args) throws IOException {
         final List<String> input = InputReader.read("day09-input.txt");
 
-        final Bridge bridge = new Bridge(0,0,0,0);
+        Bridge bridge = new Bridge(2);
 
         // Part 1
+        simulate(bridge, input);
+        System.out.println(bridge.getTailLocationMap().size());
+
+        // Part 2
+        bridge = new Bridge(10);
         simulate(bridge, input);
         System.out.println(bridge.getTailLocationMap().size());
     }

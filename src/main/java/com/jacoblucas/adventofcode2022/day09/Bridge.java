@@ -7,32 +7,27 @@ import java.util.Map;
 import java.util.stream.IntStream;
 
 public class Bridge {
-    private final Pair<Integer, Integer> start;
-
-    private int headX, headY, tailX, tailY;
+    // n x 2 for number of knots, with x,y pos
+    int[][] knots;
 
     private final Map<Pair<Integer, Integer>, Integer> tailLocationMap;
 
-    public Bridge(int headX, int headY, int tailX, int tailY) {
-        this.headX = headX;
-        this.headY = headY;
-        this.tailX = tailX;
-        this.tailY = tailY;
-        start = new Pair<>(headX, headY);
+    public Bridge(int knots) {
+        this.knots = new int[knots][2];
+        IntStream.range(0, knots).forEach(i -> {
+            this.knots[i][0] = 0;
+            this.knots[i][1] = 1;
+        });
         tailLocationMap = new HashMap<>();
-        tailLocationMap.put(new Pair<>(tailX, tailY), 1);
-    }
-
-    public Pair<Integer, Integer> start() {
-        return start;
+        tailLocationMap.put(new Pair<>(0, 0), 1);
     }
 
     public Pair<Integer, Integer> head() {
-        return new Pair<>(headX, headY);
+        return new Pair<>(knots[0][0], knots[0][1]);
     }
 
     public Pair<Integer, Integer> tail() {
-        return new Pair<>(tailX, tailY);
+        return new Pair<>(knots[knots.length-1][0], knots[knots.length-1][1]);
     }
 
     public Map<Pair<Integer, Integer>, Integer> getTailLocationMap() {
@@ -42,8 +37,8 @@ public class Bridge {
     public void move(int dx, int dy, int n) {
         IntStream.range(0, n).forEach(i -> {
             // move the head
-            headX += dx;
-            headY += dy;
+            knots[0][0] += dx;
+            knots[0][1] += dy;
             updateTail();
         });
     }
@@ -58,29 +53,30 @@ public class Bridge {
     // the tail always moves one step diagonally to keep up:
     private void updateTail() {
         int touchingDistance = 2;
-        // Assumes the head has moved, check to see if the tail moves with it
-        int dx = headX - tailX;
-        int dy = headY - tailY;
-        final int absDx = Math.abs(dx);
-        final int absDy = Math.abs(dy);
-        boolean moved = false;
-        if ((absDx == touchingDistance && dy == 0)) {
-            // move left/right
-            tailX += (dx/absDx);
-            moved = true;
-        } else if (absDy == touchingDistance && dx == 0) {
-            // move up/down
-            tailY += (dy/absDy);
-            moved = true;
-        } else if (absDx > 0 && absDy > 0 && (absDx == touchingDistance || absDy == touchingDistance)) {
-            // move diagonally
-            tailX += (dx/absDx);
-            tailY += (dy/absDy);
-            moved = true;
-        }
 
-        if (moved) {
-            final Pair<Integer, Integer> tailLocation = new Pair<>(tailX, tailY);
+        final Pair<Integer, Integer> prevTail = tail();
+
+        IntStream.range(1, knots.length).forEach(knot -> {
+            // Assumes the head has moved, check to see if the tail moves with it
+            int dx = knots[knot-1][0] - knots[knot][0];
+            int dy = knots[knot-1][1] - knots[knot][1];
+            final int absDx = Math.abs(dx);
+            final int absDy = Math.abs(dy);
+            if ((absDx == touchingDistance && dy == 0)) {
+                // move left/right
+                knots[knot][0] += (dx/absDx);
+            } else if (absDy == touchingDistance && dx == 0) {
+                // move up/down
+                knots[knot][1] += (dy/absDy);
+            } else if (absDx > 0 && absDy > 0 && (absDx == touchingDistance || absDy == touchingDistance)) {
+                // move diagonally
+                knots[knot][0] += (dx/absDx);
+                knots[knot][1] += (dy/absDy);
+            }
+        });
+
+        final Pair<Integer, Integer> tailLocation = tail();
+        if (!tailLocation.equals(prevTail)) {
             tailLocationMap.put(tailLocation, tailLocationMap.getOrDefault(tailLocation, 0) + 1);
         }
     }

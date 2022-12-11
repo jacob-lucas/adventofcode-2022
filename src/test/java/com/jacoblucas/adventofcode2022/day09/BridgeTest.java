@@ -12,12 +12,11 @@ public class BridgeTest {
 
     @Before
     public void setUp() {
-        bridge = new Bridge(0,4,0,4);
-    }
-
-    @Test
-    public void testStart() {
-        assertThat(bridge.start(), is(new Pair<>(0,4)));
+        bridge = new Bridge(2);
+        bridge.knots[0][0] = 0;
+        bridge.knots[0][1] = 4;
+        bridge.knots[1][0] = 0;
+        bridge.knots[1][1] = 4;
     }
 
     @Test
@@ -60,7 +59,11 @@ public class BridgeTest {
 
     @Test
     public void testUpRight() {
-        bridge = new Bridge(4,-1,3,0);
+        bridge = new Bridge(2);
+        bridge.knots[0][0] = 4;
+        bridge.knots[0][1] = -1;
+        bridge.knots[1][0] = 3;
+        bridge.knots[1][1] = 0;
         bridge.move(0, -1, 1);
         assertThat(bridge.head(), is(new Pair<>(4,-2)));
         assertThat(bridge.tail(), is(new Pair<>(4,-1)));
