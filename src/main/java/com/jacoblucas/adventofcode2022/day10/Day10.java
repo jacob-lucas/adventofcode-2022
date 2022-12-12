@@ -29,5 +29,8 @@ public class Day10 {
         // Part 1
         cpu.execute(instructions);
         System.out.println(cpu.getSignalStrength());
+
+        // Part 2
+        CRT.display();
     }
 }

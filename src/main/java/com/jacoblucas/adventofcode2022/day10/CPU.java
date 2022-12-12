@@ -79,6 +79,7 @@ public class CPU {
         if (INTERESTING_SIGNALS.contains(cycle)) {
             signalStrength += cycle * value;
         }
+        CRT.draw(cycle, value);
     }
 
     void post(final Instruction instruction) {

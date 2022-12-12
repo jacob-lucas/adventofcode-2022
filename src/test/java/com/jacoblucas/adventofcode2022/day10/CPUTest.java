@@ -60,5 +60,6 @@ public class CPUTest {
 
         cpu.execute(testInstructions);
         assertThat(cpu.getSignalStrength(), is(13140));
+        CRT.display();
     }
 }
