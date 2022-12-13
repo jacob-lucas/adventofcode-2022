@@ -56,4 +56,11 @@ public class HeightmapTest {
         path.forEach(System.out::println);
         assertThat(path.size() - 1, is(31));
     }
+
+    @Test
+    public void testFindShortestPath() {
+        final List<List<Pair<Integer, Integer>>> paths = heightmap.findShortestPath(new Pair<>(2, 5));
+        paths.forEach(System.out::println);
+        assertThat(paths.get(0).size() - 1, is(29));
+    }
 }

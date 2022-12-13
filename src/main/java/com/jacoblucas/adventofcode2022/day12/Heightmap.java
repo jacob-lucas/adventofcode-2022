@@ -5,6 +5,7 @@ import com.jacoblucas.adventofcode2022.utils.Pair;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -75,7 +76,6 @@ public class Heightmap {
                 return path;
             } else {
                 final List<Pair<Integer, Integer>> steps = validSteps(curr, visited);
-                System.out.println("Valid steps from " + curr + " = " + steps);
                 steps.forEach(s -> {
                     final boolean exists = new ArrayList<>(queue).stream()
                             .map(Pair::first)
@@ -122,5 +122,34 @@ public class Heightmap {
             }
         }
         return validSteps;
+    }
+
+    public List<List<Pair<Integer, Integer>>> findShortestPath(final Pair<Integer, Integer> end) {
+        // Find all lowest elevations for starting points
+        final List<Pair<Integer, Integer>> as = new ArrayList<>();
+        for (int h = 0; h < height; h++) {
+            final String line = new String(map[h]);
+            if (!(line.contains("a") || line.contains(""+START))) {
+                continue;
+            }
+            for (int w = 0; w < width; w++) {
+                if (map[h][w] == 'a' || map[h][w] == START) {
+                    as.add(new Pair<>(h, w));
+                }
+            }
+        }
+
+        System.out.println("Discovered " + as.size() + " possible starting locations");
+
+        final List<List<Pair<Integer, Integer>>> pathOptions = new ArrayList<>();
+        for (final Pair<Integer, Integer> start : as) {
+            final List<Pair<Integer, Integer>> path = findPath(start, end);
+            if (path.size() > 0) {
+                pathOptions.add(path);
+            }
+        }
+        return pathOptions.stream()
+                .sorted(Comparator.comparing(List::size))
+                .toList();
     }
 }
