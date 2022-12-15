@@ -26,7 +26,7 @@ public class KeepAwayTest {
                 .map(Monkey::parse)
                 .toList();
 
-        keepAway = new KeepAway(monkeys);
+        keepAway = new KeepAway(monkeys, false);
     }
 
     @Test
@@ -43,11 +43,11 @@ public class KeepAwayTest {
     public void testTwentyRounds() {
         IntStream.range(0, 20).forEach(i -> keepAway.executeRound());
 
-        assertThat(monkeys.get(0).getInspected(), is(101));
-        assertThat(monkeys.get(1).getInspected(), is(95));
-        assertThat(monkeys.get(2).getInspected(), is(7));
-        assertThat(monkeys.get(3).getInspected(), is(105));
+        assertThat(monkeys.get(0).getInspected().intValue(), is(101));
+        assertThat(monkeys.get(1).getInspected().intValue(), is(95));
+        assertThat(monkeys.get(2).getInspected().intValue(), is(7));
+        assertThat(monkeys.get(3).getInspected().intValue(), is(105));
 
-        assertThat(keepAway.monkeyBusiness(), is(10605));
+        assertThat(keepAway.monkeyBusiness().intValue(), is(10605));
     }
 }

@@ -25,7 +25,7 @@ public class MonkeyTest {
                 .map(Monkey::parse)
                 .toList();
 
-        keepAway = new KeepAway(monkeys);
+        keepAway = new KeepAway(monkeys, false);
     }
 
     @Test

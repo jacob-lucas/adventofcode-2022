@@ -10,18 +10,21 @@ import java.util.stream.IntStream;
 public class Day11 {
     public static void main(String[] args) throws IOException {
         final List<List<String>> input = InputReader.readGroups("day11-input.txt");
-        final List<Monkey> monkeys = new ArrayList<>(input.stream()
-                .map(Monkey::parse)
-                .toList());
-        final KeepAway keepAway = new KeepAway(monkeys);
 
         // Part 1
-        IntStream.range(0, 20).forEach(i -> {
-            System.out.println("======= ROUND " + (i+1) + " =======");
-            keepAway.executeRound();
-            System.out.println("After round " + (i+1) + " the monkeys are holding items with these worry levels:");
-            monkeys.forEach(m -> System.out.println("Monkey " + m.id() + ": " + (new ArrayList<>(m.items()))));
-        });
-        System.out.println(keepAway.monkeyBusiness());
+        List<Monkey> monkeys = new ArrayList<>(input.stream()
+                .map(Monkey::parse)
+                .toList());
+        final KeepAway keepAway1 = new KeepAway(monkeys, false);
+        IntStream.range(0, 20).forEach(i -> keepAway1.executeRound());
+        System.out.println(keepAway1.monkeyBusiness());
+
+        // Part 2
+        monkeys = new ArrayList<>(input.stream()
+                .map(Monkey::parse)
+                .toList());
+        final KeepAway keepAway2 = new KeepAway(monkeys, true);
+        IntStream.range(0, 10000).forEach(i -> keepAway2.executeRound());
+        System.out.println(keepAway2.monkeyBusiness());
     }
 }

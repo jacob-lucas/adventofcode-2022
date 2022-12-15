@@ -16,7 +16,9 @@ public class Monkey {
 
     private final Function<BigInteger, Boolean> test;
 
-    private int inspected;
+    private final BigInteger testDivisor;
+
+    private BigInteger inspected;
 
     /**
      * Monkey 0:
@@ -44,10 +46,11 @@ public class Monkey {
         this.id = id;
         this.items = new ArrayDeque<>(items);
         this.operation = operation;
-        this.test = i -> i.mod(BigInteger.valueOf(test)).equals(BigInteger.ZERO);
+        this.testDivisor = BigInteger.valueOf(test);
+        this.test = i -> i.mod(testDivisor).equals(BigInteger.ZERO);
         this.trueId = trueId;
         this.falseId = falseId;
-        this.inspected = 0;
+        this.inspected = BigInteger.ZERO;
     }
 
     public int id() {
@@ -66,6 +69,10 @@ public class Monkey {
         return test;
     }
 
+    public BigInteger getTestDivisor() {
+        return testDivisor;
+    }
+
     public int trueId() {
         return trueId;
     }
@@ -74,7 +81,7 @@ public class Monkey {
         return falseId;
     }
 
-    public int getInspected() {
+    public BigInteger getInspected() {
         return inspected;
     }
 
@@ -89,10 +96,14 @@ public class Monkey {
     }
 
     public void takeTurn(KeepAway keepAway) {
-        System.out.println("Monkey " + id + ":");
+        takeTurn(keepAway, false);
+    }
+
+    public void takeTurn(KeepAway keepAway, boolean useLCD) {
+//        System.out.println("Monkey " + id + ":");
         while (!items.isEmpty()) {
             BigInteger item = items.pop();
-            System.out.println("\tMonkey inspects an item with a worry level of " + item);
+//            System.out.println("\tMonkey inspects an item with a worry level of " + item);
 
             // 1. Inspect, adjust worry level
             final String[] parts = operation().split(" ");
@@ -109,18 +120,22 @@ public class Monkey {
                 default -> item;
             };
 
-            System.out.println("\t\tWorry level: " + prev + " " + op + " " + value + " = " + item);
+//            System.out.println("\t\tWorry level: " + prev + " " + op + " " + value + " = " + item);
 
-            inspected++;
+            inspected = inspected.add(BigInteger.ONE);
 
             // 2. Worry relief
-            item = item.divide(BigInteger.valueOf(3));
-            System.out.println("\t\tWorry level divided by 3 to " + item);
+            if (useLCD) {
+                item = item.mod(keepAway.lcd());
+            } else {
+                item = item.divide(BigInteger.valueOf(3));
+//                System.out.println("\t\tWorry level divided by 3 to " + item);
+            }
 
             // 3. Test new worry level
             int destId = throwTo(item);
             keepAway.get(destId).receive(item);
-            System.out.println("\t\tItem with worry level " + item + " is thrown to monkey " + destId);
+//            System.out.println("\t\tItem with worry level " + item + " is thrown to monkey " + destId);
         }
     }
 }
